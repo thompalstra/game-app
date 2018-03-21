@@ -1,0 +1,27 @@
+<style>
+    .overview{
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .overview .menu{
+        height: 50px;
+        display: block;
+    }
+</style>
+<div class='overview'>
+    <div class='menu'>
+        <button role='return' class='item fixed button round dark bordered pull-left'>
+            <i class="material-icons">arrow_back</i>
+        </button>
+        <button role='refresh' class='item fixed button round dark pull-right'>
+            <i class="material-icons">refresh</i>
+        </button>
+    </div>
+</div>
+<script>
+    var layout = this;
+
+    doc.one('[role="return"]').on('click', function(event){
+        layout.close();
+    })
+</script>

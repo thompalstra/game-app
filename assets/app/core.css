@@ -1,0 +1,256 @@
+
+
+x-menu {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+x-menu-item {
+  -webkit-app-region: no-drag;
+}
+
+html, body{
+    margin: 0;
+}
+
+body{
+    color: #f2f2f2;
+    background-color: #111;
+
+}
+
+x-menu{
+    display: table;
+    height: 25px;
+    width: 100%;
+}
+x-menu + x-body{
+    height: calc( 100% - 25px );
+}
+x-body{
+    position: relative;
+    display: block;
+}
+x-menu-item{
+    width: 25px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+x-menu-title{
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+x-menu-item,
+x-menu-title{
+    display: table-cell;
+    vertical-align: middle;
+    height: 25px;
+
+    padding: 0 10px;
+}
+x-menu-item:hover{
+    color: white;
+}
+x-menu-item[role="close"]:hover{
+    color: white;
+    background-color: red;
+}
+
+x-layouts{
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+
+x-layout{
+    height: 100%;
+    overflow: auto;
+    display: block;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    opacity: 1;
+    pointer-events: all;
+
+    transition: .3s;
+}
+
+x-layout[data-dismissing]{
+    transform: scale(.95);
+    opacity: 0;
+    pointer-events: none;
+}
+
+x-layout ~ x-layout{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+x-layout[data-dismissing] + x-layout{
+    visibility: visible;
+    opacity: 1;
+    pointer-events: none;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #222;
+
+}
+::-webkit-scrollbar-thumb:hover{
+    background-color: #333;
+}
+
+x-app{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+x-menu{
+}
+x-loading{
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba( 50, 50, 50, .2 );
+}
+
+x-loading x-message{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+}
+
+x-loading x-message h2{
+    margin: 0;
+    padding: 0;
+}
+x-loading x-message p{
+    margin: 0;
+    padding: 0;
+}
+x-backdrop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba( 0,0,0, .5 );
+}
+x-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background-color: #333;
+    color: #f2f2f2;
+    border-radius: 10px;
+}
+
+x-dialog x-menu-title{
+    padding: 0;
+}
+
+x-backdrop,
+x-dialog{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+x-backdrop[show],
+x-dialog[show]{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+
+
+
+x-loader{
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+x-loader{
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 5px;
+    background-color: #51B9EA;
+}
+x-loader.dark{
+    background-color: #222;
+}
+
+x-loader:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    background-color: #1B9DCD;
+    animation: xLoaderBefore 3s infinite;
+}
+x-loader:after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 20px;
+    background-color: #1B9DCD;
+    animation: xLoaderAfter 3s infinite;
+}
+
+@keyframes xLoaderBefore {
+    0% {
+        width: 20%;
+        left: -21%;
+    } 60% {
+        width: 80%;
+        left: 101%;
+    } 100% {
+        width: 80%;
+        left: 101%;
+    }
+}
+@keyframes xLoaderAfter {
+    0% {
+        width: 60%;
+        left: -61%;
+    } 30% {
+        width: 80%;
+        left: -81%;
+    } 100% {
+        width: 40%;
+        left: 101%;
+    }
+}
+
+[loading] x-loader{
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+}

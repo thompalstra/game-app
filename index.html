@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <link href="./assets/scope/core.css" rel="stylesheet"/>
+        <link href="./assets/app/core.css" rel="stylesheet"/>
+        <link href="./assets/css/style.css" rel="stylesheet"/>
+        <script src="./assets/scope/core.js" type="text/javascript"></script>
+        <script src="./assets/app/core.js" type="text/javascript"></script>
+        <script src="./assets/js/script.js" type="text/javascript"></script>
+
+        <script src="./assets/scope/db.js" type="text/javascript"></script>
+        <script src="./assets/js/settings.js" type="text/javascript"></script>
+        <script src="./assets/js/users.js" type="text/javascript"></script>
+        <title>Game guru</title>
+    </head>
+    <body>
+        <x-app data-is-loading>
+            <x-menu>
+                <x-menu-title>Game guru</x-menu-title>
+                <x-menu-item role='minimize' on='click'>−</x-menu-item>
+                <x-menu-item role='toggle' on='click'><i class="material-icons">fullscreen</i></x-menu-item>
+                <x-menu-item role='close' on='click'>×</x-menu-item>
+            </x-menu>
+            <x-body>
+                <x-layouts>
+
+                </x-layouts>
+            </x-body>
+        </x-app>
+        <script>
+            doc.on('ready', function(e){
+                window['app'] = {
+                    main: doc.one('x-app'),
+                    menu: doc.one('x-menu'),
+                    body: doc.one('x-body'),
+                    layouts: doc.one('x-layouts')
+                };
+
+                app.main.on('close', function(event){
+                    var window = remote.getCurrentWindow();
+                    var size = window.getSize();
+                    var pos = window.getPosition();
+                    localStorage.setItem( 'windowData', JSON.stringify( {
+                        position: {
+                            x: pos[0],
+                            y: pos[1]
+                        },
+                        size: {
+                            width: size[0],
+                            height: size[1]
+                        }
+                    } ) );
+                    window.close();
+                });
+                app.main.on('toggle', function(event){
+                    var window = remote.getCurrentWindow();
+                    if (!window.isMaximized()) {
+                        window.maximize();
+                    } else {
+                        window.unmaximize();
+                    }
+                });
+                app.main.on('minimize', function(event){
+                    var window = remote.getCurrentWindow();
+                    window.minimize();
+                });
+
+
+
+                app.settings = new Settings(function(data){
+                    app.users = new Users(function(data){
+                        app.layouts.open('./views/default/index.html', function(ev){
+                            app.main.removeAttribute('data-is-loading');
+                        });
+                    });
+                });
+            })
+        </script>
+    </body>
+</html>

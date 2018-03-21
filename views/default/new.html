@@ -1,0 +1,48 @@
+new
+<div class='first-start-wrapper'>
+    <form id='first-start-form'>
+        <input type="text" name="username"/>
+    </form>
+</div>
+<script>
+    console.log(this);
+    doc.on('after.eval', function(e){
+        var firstStartForm = doc.one('#first-start-form');
+        var usernameInput = doc.one('#first-start-form').elements.username;
+        firstStartForm.on('submit', function(event){
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var username = usernameInput.value;
+            //
+            // var xhr = new XMLHttpRequest();
+            //
+            // var url = 'https://api.pubgtracker.com/v2/profile/pc/{pubg-nickname}';
+            // var url = 'https://api.playbattlegrounds.com/shards/pc-krjp/matches?sort=-createdAt';
+            // var method = 'GET';
+            //
+            // xhr.open(method,url);
+            // // xhr.setRequestHeader('TRN-Api-Key', 'd04b81f0-2b01-4870-ac3c-48b4f582a029');
+            // xhr.setRequestHeader('Authorization', 'Bearer {api-key}');
+            // xhr.setRequestHeader('Accept', 'application/vnd.api+json');
+            // xhr.onreadystatechange = function(ev){
+            //     if( this.readyState == 4 ){
+            //         login();
+            //     }
+            // }.bind(xhr);
+            // xhr.send();
+
+            login( {
+                username: username,
+                scoreValue: '2865'
+            } );
+        });
+    })
+
+    function login( user ){
+        console.log('logging in');
+        app.settings.setItem( 'user', user, function(data){
+            app.layouts.close( doc.one('#--views-default-new-html') );
+        } );
+    }
+</script>

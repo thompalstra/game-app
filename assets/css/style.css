@@ -1,0 +1,88 @@
+.column{
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+.hidden{
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
+}
+
+body{
+    height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+
+.button{
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.button.fixed{
+    height: 50px;
+    width: 50px;
+}
+
+.button.default{
+    padding: 10px 20px;
+    border-radius: 3px;
+}
+
+.button.round{
+    border-radius: 100%;
+}
+.button.dark{
+    color: #777;
+}
+.button.dark:hover{
+    color: #f2f2f2;
+    background-color: rgba(125,125,125,.1);
+}
+.button.dark.bordered{
+    border: 2px dotted #777;
+    color: #777;
+}
+
+.button.dark.bordered i{
+    font-size: 28px;
+}
+
+.button.dark.bordered:hover{
+    color: #f2f2f2;
+    border-color: #f2f2f2;
+    background-color: transparent;
+}
+
+.transparent{
+    background-color: transparent;
+    color: #f2f2f2;
+}
+.transparent:hover{
+    background-color: rgba(0,0,0,.1);
+    color: white;
+}
+
+.action{
+    background-color: #476384;
+    color: #f2f2f2;
+}
+.action:hover{
+    background-color: #4f6e92;
+    color: white;
+}
+.action-inversed{
+    color: #587DA7;
+    background-color: #587DA7;
+}
+.action-inversed:hover{
+    background-color: white;
+    color: #4f6e92;
+}

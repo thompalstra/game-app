@@ -1,0 +1,337 @@
+<style>
+    .overview{
+        padding: 20px 0 0 0;
+        box-sizing: border-box;
+    }
+    .overview .menu{
+        height: 50px;
+        display: block;
+        padding: 0 20px;
+    }
+
+    .overview .content{
+        height: calc( 100% - 140px );
+        position: relative;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .overview .content .content-tab{
+        position: absolute;
+        /* top: 0; left: 0; right: 0; bottom: 0; */
+        top: 20px; left: 20px; right: 20px; bottom: 20px;
+    }
+
+    .overview .tab-actions{
+        display: block;
+        height: 70px;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: #222;
+    }
+    .overview .tab-actions .tab-action{
+        height: 50px;
+        width: 50px;
+        color: #777;
+        background-color: #333;
+        border: 0;
+        border-radius: 100%;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .overview .tab-actions .tab-action i{
+        font-size: 28px;
+    }
+
+    .overview  .tab-actions .tab-action:hover,
+    .overview  .tab-actions .tab-action[show]{
+        color: #555;
+        background-color: #ddd;
+    }
+
+    #dialog-first-form-1[loading] .row{
+        display: none;
+    }
+
+    .build-sidebar{
+        height: 100%;
+        width: 200px;
+        background-color: #222;
+        float: left;
+    }
+
+    .build-sidebar .build-list{
+        padding: 10px;
+        margin: 0;
+        list-style: none;
+    }
+
+    .build-sidebar .build-list .weapon{
+        display: block;
+        padding: 10px;
+        color: #777;
+        border-bottom: 1px solid #777;
+        cursor: pointer;
+    }
+
+    .build-sidebar .build-list .weapon[show],
+    .build-sidebar .build-list .weapon:hover{
+        /* text-decoration: underline; */
+        border-bottom: 1px solid white;
+        color: white;
+    }
+
+    .build-content{
+        height: 100%;
+        margin-left: 20px;
+        padding: 20px;
+        width: calc( 100% - 220px );
+        background-color: #222;
+        box-sizing: border-box;
+        float: right;
+    }
+
+    .build-menu-wrapper{
+        display: block;
+        margin-bottom: 10px;
+        overflow: auto;
+    }
+
+    .build-image-wrapper{
+        height: 200px;
+        text-align: center;
+    }
+
+    .build-image-wrapper image{
+        height: 200px;
+    }
+
+
+
+</style>
+<div id='overview' class='overview'>
+    <div id='menu' class='menu'>
+        <button tab='return' class='item fixed button round dark bordered pull-left'>
+            <i class="material-icons">arrow_back</i>
+        </button>
+        <button tab='refresh' class='item fixed button round dark pull-right'>
+            <i class="material-icons">refresh</i>
+        </button>
+    </div>
+    <div id='content' class='content'>
+        <div id="tab-build" class='content-tab build hidden'>
+            <div class='build-sidebar'>
+                <ul id='build-list' class='build-list'></ul>
+            </div>
+            <div class='build-content'>
+                <div class='build-menu-wrapper'>
+                    <button id='describe-build' class='item fixed button round dark pull-right hidden'>
+                        <i class="material-icons">help</i>
+                    </button>
+                </div>
+                <div class='build-image-wrapper'>
+                    <img id='build-image'/>
+                </div>
+                <!-- <h2 id='build-title'></h2> -->
+                <!-- <p id='build-description'></p> -->
+            </div>
+        </div>
+        <div id="tab-account" class='content-tab account hidden'>
+
+        </div>
+        <div id="tab-account-compare" class='content-tab account-compare hidden'>
+
+        </div>
+    </div>
+    <div id='tab-actions' class='tab-actions hidden'>
+        <button class='button tab-action' tab="#tab-account">
+            <i class="material-icons">account_circle</i>
+        </button>
+        <button class='button tab-action' tab="#tab-account-compare">
+            <i class="material-icons">compare_arrows</i>
+        </button>
+        <button class='button tab-action' tab="#tab-build">
+            <i class="material-icons">build</i>
+        </button>
+    </div>
+</div>
+
+
+<x-dialog id='dialog-first' data-backdrop>
+    <x-menu>
+        <x-menu-title>Welcome</x-menu-title>
+    </x-menu>
+    <div class='content'>
+        <p>It seems this is your first time using GG. Please enter your username below so we can sync your account information</p>
+        <form id='dialog-first-form-1'>
+            <div class='row'>
+                <input type="text" placeholder="#unknown" name="username" class="input default dark"/>
+            </div>
+            <label id='dialog-first-form-error-label' class='error-label hidden'></label>
+            <x-loader class='dark'></x-loader>
+            <div class='row'>
+                <button id='dialog-first-form-1-submit' class='button default action pull-right'>Ok</button>
+                <button id='dialog-first-form-1-skip' class='button default transparent pull-right' style='margin-right: 10px;'>Maybe later</button>
+            </div>
+        </form>
+    </div>
+</x-dialog>
+
+<x-dialog id='dialog-describe' data-backdrop>
+    <x-menu>
+        <x-menu-title id='dialog-describe-title'></x-menu-title>
+    </x-menu>
+    <div class='content'>
+        <div class='row'>
+            <div id='dialog-describe-description'></div>
+        </div>
+        <div class='row'>
+            <button id='dialog-describe-close' data-dialog-action="dismiss" class='button default action pull-right'>dismiss</button>
+        </div>
+    </div>
+</x-dialog>
+
+<script>
+    var dialogs = {
+        first: doc.one('#dialog-first'),
+        describe: doc.one('#dialog-describe')
+    };
+    var tabs = {
+        account: doc.one('.content-tab.account'),
+        accountCompare: doc.one('.content-tab.account-compare'),
+        build: doc.one('.content-tab.build')
+    };
+    var elements = {
+        overview: doc.one('#overview'),
+        menu: doc.one('#menu'),
+        content: doc.one('#content'),
+        tabActions: doc.one('#tab-actions'),
+    };
+    var build = {
+        1: {
+            // name: 'SCAR-L',
+            imageName: 'scarl.jpg',
+            title: 'SCAR-L',
+            description: 'The SCAR-L is the light variant of the FN SCAR (Special Operations Forced Combat Assault Rifle), a gas-operated short-stroke gas piston automated rifle chambered to a variety of casings. It was originally developed by FN Herstal for the United States Special operations Command (SOCOM) as an entry to the SCAR Competition, a competition to find the new service rifle for SOCOM. As of 2015, the rifle was in service in over 20 countries.',
+            statistics: {
+                damage: 41,
+            },
+            available_attachments: [1]
+        }
+    };
+
+    var attachments = {
+        1: {
+            name: 'compensator ar/s12k',
+            imageName: 'compar.jpg',
+        },
+        2: {
+            name: 'compensator sr',
+            imageName: 'compsr.jpg',
+        },
+        3: {
+            name: 'compensator smg',
+            imageName: 'compsm.jpg',
+        }
+    };
+
+    var layout = this;
+
+    function showTab( name ){
+        elements.content.find('.content-tab').forEach(function(el){
+            if( el.matches( name ) ){
+                if( ( name == '#tab-account' || name == '#tab-account-compare' ) ){
+                    if( app.users.pubg !== null ){
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                } else {
+                    el.classList.remove('hidden');
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        })
+    }
+    function showWeapon( index ){
+        var currentBuild = build[ index ];
+        doc.one('#describe-build').classList.remove('hidden');
+        doc.one('#dialog-describe-title').innerHTML =               currentBuild.title;
+        doc.one('#dialog-describe-description').innerHTML =         currentBuild.description;
+        doc.one('#build-image').src = "./assets/img/pubg/build/" +  currentBuild.imageName;
+    }
+    doc.one('#describe-build').on('click', function(event){
+        dialogs.describe.show = true;
+    })
+    doc.find('[tab="#tab-account"], [tab="#tab-account-compare"]',).on('click', function(event){
+        if( app.users.pubg == null ){
+            event.preventDefault();
+            event.stopPropagation();
+            dialogs.first.show = true;
+        }
+    });
+
+    var buildSidebarElement = doc.one('#tab-build .build-sidebar');
+    var buildContentElement = doc.one('#tab-build .build-content');
+    var buildbuilList = doc.one('#build-list');
+    for( var i in build ){
+        console.log( buildbuilList );
+        var li = buildbuilList.appendChild( doc.create( 'li', {
+            innerHTML: build[i].title,
+            className: 'weapon',
+            'data-weapon-index': i
+        }) );
+        li.on('click', function(event){
+            showWeapon( this.getAttribute('data-weapon-index') );
+        });
+    }
+
+
+    doc.on('after.eval', function(event){
+        elements.tabActions.classList.remove('hidden');
+
+        doc.find('#tab-actions .tab-action').on('click', function(event){
+            showTab( this.getAttribute('tab') );
+        });
+
+        doc.one('#dialog-first-form-1-skip').on('click', function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            dialogs.first.do('dismiss');
+        });
+        doc.one('#dialog-first-form-1').on('submit', function(event){
+            event.preventDefault();
+            event.stopPropagation();
+
+            var errorLabel = doc.one('#dialog-first-form-error-label');
+            errorLabel.classList.add('hidden');
+
+            this.setAttribute('loading', '');
+
+            app.users.getUser( this.elements.username.value, GAME_PUBG, function( response ){
+                if( response.status == 0 ){
+                    errorLabel.innerHTML = response.message;
+                    errorLabel.classList.remove('hidden');
+                    this.removeAttribute('loading');
+                } else if( response.status == 4 ){
+                    dialogs.first.do('dismiss');
+                }
+            }.bind(this));
+        });
+        doc.one('[tab="return"]').on('click', function(event){
+            layout.close();
+        });
+        dialogs.first.on('afterdismiss', function(event){
+            elements.content.classList.remove('hidden');
+        });
+
+        if( app.users.pubg === null ){
+            dialogs.first.show = true;
+        }
+    })
+</script>

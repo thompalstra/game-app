@@ -1,0 +1,58 @@
+<style>
+.games-overview{
+    height: 100%;
+    width: 100%;
+
+    background-color: #f2f2f2;
+}
+.games-overview .games-wrapper{
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.games-overview .games-wrapper .game{
+    height: 150px;
+    width: 150px;
+    margin: 10px;
+
+    background-color: red;
+
+    background-position: center;
+    background-size: cover;
+    position: relative;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    border-radius: 100%;
+    -webkit-box-shadow: 0px 2px 15px 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 15px 5px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 15px 5px rgba(0,0,0,0.2);
+    opacity: .8;
+}
+
+.games-overview .games-wrapper .game:hover{
+    border-radius: 25%;
+    opacity: 1;
+
+}
+</style>
+<div class='games-overview'>
+    <div class='games-wrapper'>
+        <div id='render-pubg' class='game pubg' style='background-image: url( "./assets/img/games/pubg-icon.jpg" )'></div>
+        <div id='render-bf4' class='game bf4' style='background-image: url( "./assets/img/games/bf4-icon.jpg" )'></div>
+        <div id='render-cgo' class='game csgo' style='background-image: url( "./assets/img/games/csgo-icon.jpg" )'></div>
+    </div>
+</div>
+<script>
+    doc.one('#render-pubg').on('click', function(event){ app.layouts.open('./views/pubg/index.html'); })
+    doc.one('#render-bf4').on('click', function(event){ app.layouts.open('./views/bf4/index.html'); })
+    doc.one('#render-cgo').on('click', function(event){ app.layouts.open('./views/csgo/index.html'); })
+</script>
